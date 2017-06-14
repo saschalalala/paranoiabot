@@ -31,7 +31,7 @@ def choose_user(bot, update):
     inline_keyboard.append([
         InlineKeyboardButton("Everyone (In Private)", callback_data='everyone'),
         # InlineKeyboardButton("Specific clearance", callback_data='clearance'),
-        InlineKeyboardButton("Chat group", callback_data='Chat group'),
+        InlineKeyboardButton("Chat group", callback_data='-245325242'),
     ])
     update.message.reply_text('Choose user',
           reply_markup=InlineKeyboardMarkup(inline_keyboard))

@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 MESSAGES = {
     'cheating_negative': 'Player {} tried to cheat by spending a negative amount of {}',
     'cheating_too_much': 'Player {} tried to spend {} pp',
+    'cheating_more_than_available': 'Player {} tried to spend more pp than he has',
     'spent': 'Player {} spent {} {}',
     'cannot_spend': 'I cannot spend {} when you don\'t specify the amount'
 }
@@ -55,6 +56,10 @@ def _spend(type, bot, update, args):
                 log_message(bot, MESSAGES['cheating_too_much'].format(current_player.get_player_name(), amount))
                 update.message.reply_text('Reset PP to the maximum of five. Incident reported')
                 amount = 5
+            if amount > current_player.pp:
+                log_message(bot, MESSAGES['cheating_more_than_available'].format(current_player.get_player_name()))
+                update.message.reply_text('You tried to spend more PP than you have.')
+                amount = current_player.pp
             current_player.remove_pp(amount)
         elif type == 'credits':
             current_player.remove_credits(amount)

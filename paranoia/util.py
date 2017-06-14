@@ -55,6 +55,10 @@ def forward_message(update, recipient):
             update.message.forward(player.telegram_id)
         update.message.reply_text('Message forwarded to all players')
     else:
-        recipient_name = Player.objects.filter(telegram_id=recipient).first().get_player_name()
-        update.message.forward(recipient)
-        update.message.reply_text('Message forwarded to {}'.format(recipient_name))
+        try:
+            recipient_name = Player.objects.filter(telegram_id=recipient).first().get_player_name()
+            update.message.forward(recipient)
+            update.message.reply_text('Message forwarded to {}'.format(recipient_name))
+        except:
+            update.message.forward(recipient)
+            update.message.reply_text('Message forwarded to the group')
