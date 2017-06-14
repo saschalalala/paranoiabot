@@ -83,6 +83,23 @@ def message_create(bot, update, user_data):
 
 def message_send(bot, update, user_data):
     recipient = user_data['recipient']
-    forward_message(update, recipient)
+    thing_to_send = ""
+    if update.message.text:
+        thing_to_send = update.message.text
+        message_type = "text"
+    elif update.message.document:
+        thing_to_send = update.message.document
+        message_type = "doc"
+    elif update.message.photo:
+        thing_to_send = update.message.photo[-1]
+        message_type = "photo"
+    elif update.message.sticker:
+        thing_to_send = update.message.sticker
+        message_type = "sticker"
+    else:
+        message_type = "unknown"
+    message = thing_to_send
+    logger.debug(message)
+    logger.debug(message_type)
+    send_message(bot, recipient, thing_to_send, message_type=message_type)
     return ConversationHandler.END
-
