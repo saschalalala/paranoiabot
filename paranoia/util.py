@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 def log_to_channel(bot, update):
-    message = "{}: {}".format(update.message.from_user['username'], update.message.text)
-    log_channel_id = Game.objects.get(pk=1).channel_id
-    bot.sendMessage(log_channel_id, message)
+    if update.message.chat.id > 0:
+        log_channel_id = Game.objects.get(pk=1).channel_id
+        forward_message(update, log_channel_id)
 
 
 def log_message(bot, message):
