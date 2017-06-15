@@ -110,7 +110,12 @@ def reply(bot, update, args):
     if len(args) < 2:
         update.message.reply_text('I need a recipient and a string to send')
     else:
-        recipient = Player.objects.filter(name=args[0]).first().telegram_id
-        message = " ".join(args[1:])
-        bot.send_message(recipient, message)
-        update.message.reply_text('Successfully replied')
+        try:
+            recipient = Player.objects.filter(name=args[0]).first().telegram_id
+            message = " ".join(args[1:])
+            bot.send_message(recipient, message)
+            update.message.reply_text('Successfully replied')
+        except AttributeError:
+            update.message.reply_text('This name could not be found in the database')
+        except:
+            update.message.reply_text('Unknown error')

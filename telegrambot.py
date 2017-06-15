@@ -72,6 +72,7 @@ def main():
     text_snippet_handler = CommandHandler('add_text_snippet', add_text_snippet, pass_args=True)
     reply_handler = CommandHandler('reply', reply, pass_args=True)
     random_home_handler = CommandHandler('random_home', random_home)
+    admin_info_handler = CommandHandler('admin_info', admin_info)
     send_snippet_handler = ConversationHandler(
         entry_points=[CommandHandler('send_snippet', choose_user)],
         states={
@@ -112,13 +113,7 @@ def main():
         },
         fallbacks=[cancel_handler]
     )
-    admin_info_handler = ConversationHandler(
-        entry_points=[CommandHandler('admin_info', choose_user)],
-        states={
-            0: [CallbackQueryHandler(admin_info, pass_user_data=True)]
-        },
-        fallbacks=[cancel_handler]
-    )
+
 
     log_message_handler = MessageHandler(Filters.all, log_to_channel)
 

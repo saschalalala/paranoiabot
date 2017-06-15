@@ -116,39 +116,18 @@ def _admin_spend_save(type, player, amount, bot, update):
     return ConversationHandler.END
 
 
-def admin_info(bot, update, user_data):
-    query = update.callback_query
-    chat_id = query.message.chat_id
-    user_data['telegram_id'] = query.data
-    info_message = """
-Name: {}
-Clearance: {}
-Credits: {}
-PP: {}
-        """
-    if user_data['telegram_id'] == 'everyone':
-        all_players = Player.objects.filter(gm=False)
-        for player in all_players:
-            bot.send_message(chat_id, info_message.format(
-                                      player.get_player_name(),
-                                      player.clearance.name,
-                                      player.credits,
-                                      player.pp))
-    else:
-        try:
-            current_player = Player.objects.filter(telegram_id=user_data['telegram_id']).first()
-            bot.send_message(chat_id, info_message.format(
-                                      current_player.get_player_name(),
-                                      current_player.clearance.name,
-                                      current_player.credits,
-                                      current_player.pp))
-        except:
-            bot.send_message(chat_id, text='Invalid input or not implemented. Aborting.')
-    return ConversationHandler.END
-
-
-
-
-
-
-
+def admin_info(bot, update):
+    info_message = "`{0: <7} {1: >7} {2: >5}`"
+    info_messages = [""]
+    # try:
+    all_players = Player.objects.filter(gm=False).all().order_by('name')
+    for player in all_players:
+        info_messages.append(info_message.format(
+            player.name,
+            player.credits,
+            player.pp)
+        )
+    message = "\n".join(info_messages)
+    update.message.reply_text(message, parse_mode="Markdown")
+    # except:
+    #     update.message.reply_text(text='Invalid input or not implemented. Aborting.')
