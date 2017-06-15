@@ -28,6 +28,7 @@ def clone_kill(bot, update, user_data):
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
                           )
+    bot.send_message(player.telegram_id, 'One of your clones has been killed')
     return ConversationHandler.END
 
 
@@ -111,6 +112,7 @@ def _admin_spend_save(type, player, amount, bot, update):
             update.message.reply_text('Invalid input or not implemented. Aborting.')
             return ConversationHandler.END
     update.message.reply_text('Successfully spent {} {} for {}'.format(amount, type, chosen_player.get_player_name()))
+    bot.send_message(chosen_player.telegram_id, '{} {} have been spent for you'.format(amount, type))
     return ConversationHandler.END
 
 

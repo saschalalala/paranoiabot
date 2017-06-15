@@ -38,6 +38,7 @@ from .paranoia.snippets import (
     add_text_snippet,
     message_create,
     message_send,
+    reply,
     snippet_send,
     snippet_choose
 )
@@ -69,6 +70,7 @@ def main():
     # )
     greet_everyone_handler = CommandHandler('greet_everyone', greet_everyone)
     text_snippet_handler = CommandHandler('add_text_snippet', add_text_snippet, pass_args=True)
+    reply_handler = CommandHandler('reply', reply, pass_args=True)
     random_home_handler = CommandHandler('random_home', random_home)
     send_snippet_handler = ConversationHandler(
         entry_points=[CommandHandler('send_snippet', choose_user)],
@@ -117,6 +119,7 @@ def main():
         },
         fallbacks=[cancel_handler]
     )
+
     log_message_handler = MessageHandler(Filters.all, log_to_channel)
 
     # Player specific handlers
@@ -134,6 +137,7 @@ def main():
     dp.add_handler(text_snippet_handler)
     dp.add_handler(random_home_handler)
     dp.add_handler(help_handler)
+    dp.add_handler(reply_handler)
 
     # Conversation handlers
     dp.add_handler(send_snippet_handler)

@@ -103,3 +103,14 @@ def message_send(bot, update, user_data):
     logger.debug(message_type)
     send_message(bot, recipient, thing_to_send, message_type=message_type)
     return ConversationHandler.END
+
+
+@admin_only
+def reply(bot, update, args):
+    if len(args) < 2:
+        update.message.reply_text('I need a recipient and a string to send')
+    else:
+        recipient = Player.objects.filter(name=args[0]).first().telegram_id
+        message = " ".join(args[1:])
+        bot.send_message(recipient, message)
+        update.message.reply_text('Successfully replied')

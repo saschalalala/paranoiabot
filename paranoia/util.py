@@ -19,8 +19,9 @@ logger = logging.getLogger(__name__)
 def log_to_channel(bot, update):
     if update.message.chat.id > 0:
         log_channel_id = Game.objects.get(pk=1).channel_id
+        player = Player.objects.filter(telegram_id=update.message.from_user.id).first()
         forward_message(update, log_channel_id)
-        reply_snippet = "/reply {}".format(update.message.from_user.username)
+        reply_snippet = "/reply {}".format(player.name)
         bot.send_message(log_channel_id, reply_snippet)
 
 
@@ -77,9 +78,11 @@ def forward_message(update, recipient):
         update.message.reply_text('Message forwarded to all players')
     else:
         try:
-            recipient_name = Player.objects.filter(telegram_id=recipient).first().get_player_name()
+            recipient_name = Player.objects.filter(telegram_id=recipient).first().name
             update.message.forward(recipient)
-            update.message.reply_text('Message forwarded to {}'.format(recipient_name))
+            # update.message.reply_text('Message forwarded to {}'.format(recipient_name))
         except:
             update.message.forward(recipient)
-            update.message.reply_text('Message forwarded to the group')
+            # update.message.reply_text('Message forwarded to the group')
+
+
