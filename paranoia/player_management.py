@@ -7,6 +7,7 @@ from telegram import (
 from telegram.ext import ConversationHandler
 
 from django_paranoiabot.models import Player
+from .decorators import admin_only
 
 logging.basicConfig(format='[%(asctime)s - %(name)s - %(funcName)s -  %(levelname)s]: %(message)s',
                     level=logging.DEBUG)
@@ -116,14 +117,15 @@ def _admin_spend_save(type, player, amount, bot, update):
     return ConversationHandler.END
 
 
+@admin_only
 def admin_info(bot, update):
-    info_message = "`{0: <7} {1: >7} {2: >5}`"
+    info_message = "`{0: <17} {1: >7} {2: >5}`"
     info_messages = [""]
     # try:
     all_players = Player.objects.filter(gm=False).all().order_by('name')
     for player in all_players:
         info_messages.append(info_message.format(
-            player.name,
+            player.get_player_name(),
             player.credits,
             player.pp)
         )

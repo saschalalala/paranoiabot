@@ -20,9 +20,10 @@ def admin_only(func):
         bot = args[0]
         update = args[1]
         current_user = Player.objects.filter(telegram_id=update.message.from_user.id).first()
+        called_function = update.message.text or "Not found"
         if not current_user.gm:
             update.message.reply_text("You are not allowed to do this, Troubleshooter. This incident will be reported")
-            message = "The user {} just entered a forbidden command.".format(current_user)
+            message = "The user {} just entered a forbidden command: {}".format(current_user, called_function)
             log_channel_id = Game.objects.get(pk=1).channel_id
             bot.sendMessage(log_channel_id, message)
             return 1
